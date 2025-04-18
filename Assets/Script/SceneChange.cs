@@ -1,11 +1,11 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneChange : MonoBehaviour {
      SpriteRenderer spriteRenderer;
-    public float blinkInterval = 0.5f;  // “_–Å‚ÌŠÔŠui•bj
-    public bool isBlinking = true;      // “_–Å‚Ì§Œäƒtƒ‰ƒO
+    public float blinkInterval = 0.5f;  // ç‚¹æ»…ã®é–“éš”ï¼ˆç§’ï¼‰
+    public bool isBlinking = true;      // ç‚¹æ»…ã®åˆ¶å¾¡ãƒ•ãƒ©ã‚°
     private Coroutine blinkCoroutine;
 
     private void Start() {
@@ -15,13 +15,13 @@ public class SceneChange : MonoBehaviour {
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
-            SceneManager.LoadScene("Game"); // ‚±‚±‚ÉØ‚è‘Ö‚¦‚½‚¢ƒV[ƒ“–¼‚ğ‹L“ü
+            SceneManager.LoadScene("Game"); // ã“ã“ã«åˆ‡ã‚Šæ›¿ãˆãŸã„ã‚·ãƒ¼ãƒ³åã‚’è¨˜å…¥
         }
     }
 
     private IEnumerator BlinkSprite() {
         while (isBlinking) {
-            spriteRenderer.enabled = !spriteRenderer.enabled;  // •\¦E”ñ•\¦‚ğØ‚è‘Ö‚¦
+            spriteRenderer.enabled = !spriteRenderer.enabled;  // è¡¨ç¤ºãƒ»éè¡¨ç¤ºã‚’åˆ‡ã‚Šæ›¿ãˆ
             yield return new WaitForSeconds(blinkInterval);
         }
     }
@@ -30,7 +30,7 @@ public class SceneChange : MonoBehaviour {
     //    if (blinkCoroutine != null) {
     //        StopCoroutine(blinkCoroutine);
     //        blinkCoroutine = null;
-    //        spriteRenderer.enabled = true;  // “_–ÅI—¹‚Í•\¦ó‘Ô‚É–ß‚·
+    //        spriteRenderer.enabled = true;  // ç‚¹æ»…çµ‚äº†æ™‚ã¯è¡¨ç¤ºçŠ¶æ…‹ã«æˆ»ã™
     //    }
     //}
 }

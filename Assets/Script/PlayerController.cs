@@ -1,36 +1,36 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
 
 public class PlayerController : MonoBehaviour {
 
-    // ‰æ–Ê’[‚Ì‹«ŠE’liƒ[ƒ‹ƒhÀ•Wj
+    // ç”»é¢ç«¯ã®å¢ƒç•Œå€¤ï¼ˆãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ï¼‰
     private float xMin, xMax, yMin, yMax;
 
     [SerializeField] float moveSp = 5f;
     [SerializeField] private GameObject gameManager;
 
-    [SerializeField] private TextMeshProUGUI timerText;  // ’Ç‰ÁFƒ^ƒCƒ}[•\¦—p‚Ì TextMeshProUGUI •Ï”
+    [SerializeField] private TextMeshProUGUI timerText;  // è¿½åŠ ï¼šã‚¿ã‚¤ãƒãƒ¼è¡¨ç¤ºç”¨ã® TextMeshProUGUI å¤‰æ•°
 
     Animator animator;
     Rigidbody2D rb;
 
-    private Vector2 moveDirection = Vector2.down; // ‰Šú•ûŒü
+    private Vector2 moveDirection = Vector2.down; // åˆæœŸæ–¹å‘
 
-    [SerializeField] float gameOverTime = 20f; // ƒQ[ƒ€ƒI[ƒo[‚É‚È‚é‚Ü‚Å‚ÌŠÔi•bj
+    [SerializeField] float gameOverTime = 20f; // ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ã«ãªã‚‹ã¾ã§ã®æ™‚é–“ï¼ˆç§’ï¼‰
     private float timer = 0f;
 
     bool isStart;
     int point=0;
 
     void Awake() {
-        // ƒJƒƒ‰‚Ìƒrƒ…[ƒ|[ƒg‚©‚çƒ[ƒ‹ƒhÀ•W‚ğæ“¾‚µ‚Ä‹«ŠE‚ğİ’è
+        // ã‚«ãƒ¡ãƒ©ã®ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã‹ã‚‰ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’å–å¾—ã—ã¦å¢ƒç•Œã‚’è¨­å®š
         Camera cam = Camera.main;
         Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, 0));
         Vector3 topRight = cam.ViewportToWorldPoint(new Vector3(1, 1, 0));
 
-        // ƒLƒƒƒ‰ƒNƒ^[‚ÌƒTƒCƒY‚ğæ“¾i—á: SpriteRenderer‚ğg‚Á‚Ä‚¢‚éê‡j
+        // ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã‚µã‚¤ã‚ºã‚’å–å¾—ï¼ˆä¾‹: SpriteRendererã‚’ä½¿ã£ã¦ã„ã‚‹å ´åˆï¼‰
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        Vector3 charExtents = sr.bounds.extents*2;  // ”¼•ª‚ÌƒTƒCƒYi•E‚‚³j
+        Vector3 charExtents = sr.bounds.extents*2;  // åŠåˆ†ã®ã‚µã‚¤ã‚ºï¼ˆå¹…ãƒ»é«˜ã•ï¼‰
 
         xMin = bottomLeft.x;
         yMin = bottomLeft.y + charExtents.y;
@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour {
 
         animator = GetComponent<Animator>();
         if (animator == null) {
-            Debug.LogError("Animator‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñI");
+            Debug.LogError("AnimatorãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ï¼");
         }
 
         rb = GetComponent<Rigidbody2D>();
@@ -47,8 +47,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Start() {
-        isStart = false; // ƒQ[ƒ€ŠJnƒtƒ‰ƒO‚ğ‰Šú‰»
-        animator.speed = 0f; // ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’â~
+        isStart = false; // ã‚²ãƒ¼ãƒ é–‹å§‹ãƒ•ãƒ©ã‚°ã‚’åˆæœŸåŒ–
+        animator.speed = 0f; // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åœæ­¢
     }
 
     [System.Obsolete]
@@ -56,10 +56,10 @@ public class PlayerController : MonoBehaviour {
         if (!isStart) {
             if (Input.GetKeyDown(KeyCode.Space)) {
                 isStart = true;
-                timer = 0f; // ƒQ[ƒ€ŠJn‚Éƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
+                timer = 0f; // ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã«ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
 
-                animator.speed = 1f; // ƒAƒjƒ[ƒVƒ‡ƒ“‚ğÄŠJ
-                transform.position = new Vector3(0,0,0); // —áF‰ŠúˆÊ’u‚ğ(0, 0, 0)‚Éİ’è
+                animator.speed = 1f; // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’å†é–‹
+                transform.position = new Vector3(0,0,0); // ä¾‹ï¼šåˆæœŸä½ç½®ã‚’(0, 0, 0)ã«è¨­å®š
                 moveDirection = Vector2.down;
                 moveSp = 5f;
                 gameManager.GetComponent<ScoreManager>().ResetScore();                
@@ -67,12 +67,12 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
-        timer += Time.deltaTime; // –ˆƒtƒŒ[ƒ€ƒ^ƒCƒ}[‚ğXV
+        timer += Time.deltaTime; // æ¯ãƒ•ãƒ¬ãƒ¼ãƒ ã‚¿ã‚¤ãƒãƒ¼ã‚’æ›´æ–°
 
-        // ŠÔŒo‰ß‚ÅƒQ[ƒ€ƒI[ƒo[”»’è
+        // æ™‚é–“çµŒéã§ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼åˆ¤å®š
         if (timer >= gameOverTime) {
             GameOver();
-            return; // ƒ^ƒCƒ}[‚É‚æ‚éƒQ[ƒ€ƒI[ƒo[‚ª”­¶‚µ‚½‚çAˆÈ~‚Ì Update ˆ—‚Ís‚í‚È‚¢
+            return; // ã‚¿ã‚¤ãƒãƒ¼ã«ã‚ˆã‚‹ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ãŒç™ºç”Ÿã—ãŸã‚‰ã€ä»¥é™ã® Update å‡¦ç†ã¯è¡Œã‚ãªã„
         }
 
 
@@ -90,32 +90,32 @@ public class PlayerController : MonoBehaviour {
 
         rb.velocity = moveDirection * moveSp;
 
-        // ‰æ–Ê’[”»’è
+        // ç”»é¢ç«¯åˆ¤å®š
         Vector2 pos = transform.position;
         if (pos.x < xMin || pos.x > xMax || pos.y < yMin || pos.y > yMax) {
             GameOver();
         }
 
-        timerText.text = "Time: " + (gameOverTime - timer).ToString("F2");  // ’Ç‰ÁFƒ^ƒCƒ}[‚ğTextMeshProUGUI‚É•\¦
+        timerText.text = "Time: " + (gameOverTime - timer).ToString("F2");  // è¿½åŠ ï¼šã‚¿ã‚¤ãƒãƒ¼ã‚’TextMeshProUGUIã«è¡¨ç¤º
 
     }
 
     [System.Obsolete]
     void GameOver() {
-        // ƒQ[ƒ€ƒI[ƒo[ˆ—
-        Debug.Log("ƒQ[ƒ€ƒI[ƒo[I");
-        rb.velocity = Vector2.zero; // “®‚«‚ğ~‚ß‚é
+        // ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼å‡¦ç†
+        Debug.Log("ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ï¼");
+        rb.velocity = Vector2.zero; // å‹•ãã‚’æ­¢ã‚ã‚‹
         isStart = false;
 
-        animator.speed = 0f; // ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’â~
-                             // ‚±‚±‚ÉƒQ[ƒ€ƒI[ƒo[‰æ–Ê‚Ì•\¦‚âƒŠƒXƒ^[ƒgˆ—‚ğ’Ç‰Á‚µ‚Ä‚­‚¾‚³‚¢
-                             // —á: SceneManager.LoadScene("GameOverScene");
+        animator.speed = 0f; // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åœæ­¢
+                             // ã“ã“ã«ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼ç”»é¢ã®è¡¨ç¤ºã‚„ãƒªã‚¹ã‚¿ãƒ¼ãƒˆå‡¦ç†ã‚’è¿½åŠ ã—ã¦ãã ã•ã„
+                             // ä¾‹: SceneManager.LoadScene("GameOverScene");
     }
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Item")) {
-            //Destroy(other.gameObject); // ƒAƒCƒeƒ€‚ğÁ‚·
-            //Debug.Log("ƒAƒCƒeƒ€‚ğÁ‚·!");
+            //Destroy(other.gameObject); // ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¶ˆã™
+            //Debug.Log("ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ¶ˆã™!");
 
             int px =Random.Range(-3,3);
             int py =Random.Range(-2,2);

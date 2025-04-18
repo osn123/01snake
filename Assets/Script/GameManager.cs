@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class ScoreManager : MonoBehaviour {
-    public TextMeshProUGUI scoreText; // Inspector‚ÅTextƒRƒ“ƒ|[ƒlƒ“ƒg‚ğƒAƒ^ƒbƒ`
+    public TextMeshProUGUI scoreText; // Inspectorã§Textã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ã‚¢ã‚¿ãƒƒãƒ
     private int score = 0;
 
     void Start() {
