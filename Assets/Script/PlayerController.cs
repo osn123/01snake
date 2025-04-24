@@ -2,7 +2,8 @@
 using TMPro;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : MonoBehaviour
+{
 
     // 画面端の境界値（ワールド座標）
     private float xMin, xMax, yMin, yMax;
@@ -22,8 +23,8 @@ public class PlayerController : MonoBehaviour {
 
     bool isStart;
     bool isGameOver;
-    int point =0;
-    public static int pointSum =0;
+    int point = 0;
+    public static int pointSum = 0;
 
     [SerializeField] SpriteRenderer over;
     [SerializeField] SpriteRenderer press;
@@ -32,7 +33,8 @@ public class PlayerController : MonoBehaviour {
     AudioSource aud;
 
 
-    void Awake() {
+    void Awake()
+    {
         // カメラのビューポートからワールド座標を取得して境界を設定
         Camera cam = Camera.main;
         Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, 0));
@@ -40,7 +42,7 @@ public class PlayerController : MonoBehaviour {
 
         // キャラクターのサイズを取得（例: SpriteRendererを使っている場合）
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        Vector3 charExtents = sr.bounds.extents*2;  // 半分のサイズ（幅・高さ）
+        Vector3 charExtents = sr.bounds.extents * 2;  // 半分のサイズ（幅・高さ）
 
         xMin = bottomLeft.x;
         yMin = bottomLeft.y + charExtents.y;
@@ -48,7 +50,8 @@ public class PlayerController : MonoBehaviour {
         yMax = topRight.y;
 
         animator = GetComponent<Animator>();
-        if (animator == null) {
+        if (animator == null)
+        {
             Debug.LogError("Animatorが見つかりません！");
         }
 
@@ -56,9 +59,10 @@ public class PlayerController : MonoBehaviour {
 
     }
 
-    void Start() {
+    void Start()
+    {
         isStart = false; // ゲーム開始フラグを初期化
-        isGameOver = false; // ゲーム開始フラグを初期化
+        isGameOver = false; // 
         //animator.speed = 0f; // アニメーションを停止
         over = GetComponent<SpriteRenderer>();
         press = GetComponent<SpriteRenderer>();
@@ -66,7 +70,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     [System.Obsolete]
-    void Update() {
+    void Update()
+    {
         //if (!isStart) {
         //    if (Input.GetKeyDown(KeyCode.Space)) {
         //        isStart = true;
@@ -83,8 +88,9 @@ public class PlayerController : MonoBehaviour {
 
         if (isGameOver)
         {
-            
+
             over.enabled = true;
+            //over.SetActive(true);
             press.enabled = true;
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -98,9 +104,8 @@ public class PlayerController : MonoBehaviour {
                 //moveDirection = Vector2.down;
                 //moveSp = 5f;
 
+                SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
 
-                    SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
-               
             }
             return;
         }
@@ -108,7 +113,8 @@ public class PlayerController : MonoBehaviour {
         timer += Time.deltaTime; // 毎フレームタイマーを更新
 
         // 時間経過でゲームオーバー判定
-        if (timer >= gameOverTime) {
+        if (timer >= gameOverTime)
+        {
             GameOver();
             return; // タイマーによるゲームオーバーが発生したら、以降の Update 処理は行わない
         }
@@ -123,14 +129,15 @@ public class PlayerController : MonoBehaviour {
         else if (Input.GetKeyDown(KeyCode.RightArrow))
             moveDirection = Vector2.right;
 
-        animator.SetFloat("MoveX",moveDirection.x);
-        animator.SetFloat("MoveY",moveDirection.y);
+        animator.SetFloat("MoveX", moveDirection.x);
+        animator.SetFloat("MoveY", moveDirection.y);
 
         rb.velocity = moveDirection * moveSp;
 
         // 画面端判定
         Vector2 pos = transform.position;
-        if (pos.x < xMin || pos.x > xMax || pos.y < yMin || pos.y > yMax) {
+        if (pos.x < xMin || pos.x > xMax || pos.y < yMin || pos.y > yMax)
+        {
             GameOver();
         }
 
@@ -139,7 +146,8 @@ public class PlayerController : MonoBehaviour {
     }
 
     [System.Obsolete]
-    void GameOver() {
+    void GameOver()
+    {
         // ゲームオーバー処理
         Debug.Log("ゲームオーバー！");
         rb.velocity = Vector2.zero; // 動きを止める
@@ -156,19 +164,22 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-        if (other.gameObject.CompareTag("Item")) {
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Item"))
+        {
             //Destroy(other.gameObject); // アイテムを消す
             //Debug.Log("アイテムを消す!");
 
-            int px =Random.Range(-3,3);
-            int py =Random.Range(-2,2);
+            int px = Random.Range(-3, 3);
+            int py = Random.Range(-2, 2);
 
             this.aud.PlayOneShot(this.appleSE);
 
-            other.transform.position = new Vector3(px,py,0);
-            if (moveSp < 10f) {
-                moveSp+=1f;
+            other.transform.position = new Vector3(px, py, 0);
+            if (moveSp < 10f)
+            {
+                moveSp += 1f;
             }
             point = 1;
             pointSum += 1;
