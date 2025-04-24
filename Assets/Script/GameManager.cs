@@ -23,4 +23,8 @@ public class ScoreManager : MonoBehaviour {
     void UpdateScoreText() {
         scoreText.text = "Score: " + score;
     }
+    int GetScore()
+    {
+        return score;
+    }
 }

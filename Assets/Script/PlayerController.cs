@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
     // 画面端の境界値（ワールド座標）
     private float xMin, xMax, yMin, yMax;
 
-    [SerializeField] float moveSp = 5f;
+    [SerializeField] float moveSp = 3f;
     [SerializeField] private GameObject gameManager;
 
     [SerializeField] private TextMeshProUGUI timerText;  // 追加：タイマー表示用の TextMeshProUGUI 変数
@@ -20,7 +21,16 @@ public class PlayerController : MonoBehaviour {
     private float timer = 0f;
 
     bool isStart;
-    int point=0;
+    bool isGameOver;
+    int point =0;
+    public static int pointSum =0;
+
+    [SerializeField] SpriteRenderer over;
+    [SerializeField] SpriteRenderer press;
+
+    public AudioClip appleSE;
+    AudioSource aud;
+
 
     void Awake() {
         // カメラのビューポートからワールド座標を取得して境界を設定
@@ -48,21 +58,49 @@ public class PlayerController : MonoBehaviour {
 
     void Start() {
         isStart = false; // ゲーム開始フラグを初期化
-        animator.speed = 0f; // アニメーションを停止
+        isGameOver = false; // ゲーム開始フラグを初期化
+        //animator.speed = 0f; // アニメーションを停止
+        over = GetComponent<SpriteRenderer>();
+        press = GetComponent<SpriteRenderer>();
+        this.aud = GetComponent<AudioSource>();
     }
 
     [System.Obsolete]
     void Update() {
-        if (!isStart) {
-            if (Input.GetKeyDown(KeyCode.Space)) {
-                isStart = true;
-                timer = 0f; // ゲーム開始時にタイマーをリセット
+        //if (!isStart) {
+        //    if (Input.GetKeyDown(KeyCode.Space)) {
+        //        isStart = true;
+        //        timer = 0f; // ゲーム開始時にタイマーをリセット
+        //        gameManager.GetComponent<ScoreManager>().ResetScore();
 
-                animator.speed = 1f; // アニメーションを再開
-                transform.position = new Vector3(0,0,0); // 例：初期位置を(0, 0, 0)に設定
-                moveDirection = Vector2.down;
-                moveSp = 5f;
-                gameManager.GetComponent<ScoreManager>().ResetScore();                
+        //        animator.speed = 1f; // アニメーションを再開
+        //        transform.position = new Vector3(0, 0, 0); // 例：初期位置を(0, 0, 0)に設定
+        //        moveDirection = Vector2.down;
+        //        moveSp = 5f;
+        //    }
+        //    return;
+        //}
+
+        if (isGameOver)
+        {
+            
+            over.enabled = true;
+            press.enabled = true;
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                //isStart = true;
+                //timer = 0f; // ゲーム開始時にタイマーをリセット
+                //gameManager.GetComponent<ScoreManager>().ResetScore();
+
+                //animator.speed = 1f; // アニメーションを再開
+                //transform.position = new Vector3(0, 0, 0); // 例：初期位置を(0, 0, 0)に設定
+                //moveDirection = Vector2.down;
+                //moveSp = 5f;
+
+
+                    SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
+               
             }
             return;
         }
@@ -106,10 +144,16 @@ public class PlayerController : MonoBehaviour {
         Debug.Log("ゲームオーバー！");
         rb.velocity = Vector2.zero; // 動きを止める
         isStart = false;
+        isGameOver = true;
 
         animator.speed = 0f; // アニメーションを停止
                              // ここにゲームオーバー画面の表示やリスタート処理を追加してください
                              // 例: SceneManager.LoadScene("GameOverScene");
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -120,13 +164,17 @@ public class PlayerController : MonoBehaviour {
             int px =Random.Range(-3,3);
             int py =Random.Range(-2,2);
 
+            this.aud.PlayOneShot(this.appleSE);
+
             other.transform.position = new Vector3(px,py,0);
             if (moveSp < 10f) {
-                moveSp*=1.2f;
+                moveSp+=1f;
             }
-            point = 100;
+            point = 1;
+            pointSum += 1;
 
             gameManager.GetComponent<ScoreManager>().AddScore(point);
+
 
         }
     }
