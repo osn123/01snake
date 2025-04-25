@@ -97,10 +97,10 @@ public class PlayerController : MonoBehaviour {
         timer += Time.deltaTime; // 毎フレームタイマーを更新
 
         // 時間経過でゲームオーバー判定
-        if (timer >= gameOverTime) {
-            GameOver();
-            return; // タイマーによるゲームオーバーが発生したら、以降の Update 処理は行わない
-        }
+        //if (timer >= gameOverTime) {
+        //    GameOver();
+        //    return; // タイマーによるゲームオーバーが発生したら、以降の Update 処理は行わない
+        //}
 
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
@@ -120,6 +120,10 @@ public class PlayerController : MonoBehaviour {
         // 画面端判定
         Vector2 pos = transform.position;
         if (pos.x < xMin || pos.x > xMax || pos.y < yMin || pos.y > yMax) {
+
+            // 1. 座標を補正（画面内の範囲にクランプ）
+            pos.x = Mathf.Clamp(pos.x,xMin,xMax);
+            pos.y = Mathf.Clamp(pos.y,yMin,yMax);
             GameOver();
         }
 

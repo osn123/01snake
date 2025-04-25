@@ -15,6 +15,7 @@ public class SceneChangeTitle : MonoBehaviour {
     [SerializeField] GameObject pushStartImage;
     [SerializeField] GameObject pressStartText;
     public Text messageText;
+    public Text pointText;
     AudioSource aud;
     public AudioClip appleSE;
 
@@ -24,6 +25,8 @@ public class SceneChangeTitle : MonoBehaviour {
 
         StartCoroutine(ShowResultSequence());
         this.aud = GetComponent<AudioSource>();
+        messageText.gameObject.SetActive(false);
+        pointText.gameObject.SetActive(false);
     }
 
     void Update() {
@@ -39,13 +42,15 @@ public class SceneChangeTitle : MonoBehaviour {
     IEnumerator ShowResultSequence() {
         yield return new WaitForSeconds(1.0f);
 
-        this.aud.PlayOneShot(this.appleSE);
         messageText.text = "あなたの集めたりんごは";
+        messageText.gameObject.SetActive(true);
+        this.aud.PlayOneShot(this.appleSE);
 
         yield return new WaitForSeconds(1.0f);
 
+        pointText.text = PlayerController.pointSum.ToString() + "個";
+        pointText.gameObject.SetActive(true);
         this.aud.PlayOneShot(this.appleSE);
-        text.text = PlayerController.pointSum.ToString() + "個";
         PlayerController.pointSum=0;
 
         yield return new WaitForSeconds(1.0f);
