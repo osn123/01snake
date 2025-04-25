@@ -17,6 +17,9 @@ public class SceneChange : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space)) {
             SceneManager.LoadScene("Game"); // ここに切り替えたいシーン名を記入
         }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }
     }
 
     private IEnumerator BlinkSprite() {

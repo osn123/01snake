@@ -1120,10 +1120,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 461a88d0126fd3f47a95155a657ccde5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSp: 5
+  moveSp: 2
   gameManager: {fileID: 1852158167}
   timerText: {fileID: 690126265}
-  gameOverTime: 5
+  gameOverTime: 10
   gameOverImage: {fileID: 886056842}
   pushStartImage: {fileID: 37148478}
   appleSE: {fileID: 8300000, guid: 7e4adfa93146213449087c77e3c46962, type: 3}

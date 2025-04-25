@@ -8,7 +8,10 @@ public class PlayerController : MonoBehaviour {
     // 画面端の境界値（ワールド座標）
     private float xMin, xMax, yMin, yMax;
 
-    [SerializeField] float moveSp = 3f;
+    float moveSp = 2f;
+    float gameOverTime = 10f; // ゲームオーバーになるまでの時間（秒）
+
+
     [SerializeField] private GameObject gameManager;
 
     [SerializeField] private TextMeshProUGUI timerText;  // 追加：タイマー表示用の TextMeshProUGUI 変数
@@ -18,10 +21,8 @@ public class PlayerController : MonoBehaviour {
 
     private Vector2 moveDirection = Vector2.down; // 初期方向
 
-    [SerializeField] float gameOverTime = 20f; // ゲームオーバーになるまでの時間（秒）
     private float timer = 0f;
 
-    bool isStart;
     bool isGameOver;
     int point = 0;
     public static int pointSum = 0;
@@ -63,7 +64,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     void Start() {
-        isStart = false; // ゲーム開始フラグを初期化
         isGameOver = false; // 
         //animator.speed = 0f; // アニメーションを停止
         this.aud = GetComponent<AudioSource>();
@@ -77,20 +77,9 @@ public class PlayerController : MonoBehaviour {
 
     [System.Obsolete]
     void Update() {
-        //if (!isStart) {
-        //    if (Input.GetKeyDown(KeyCode.Space)) {
-        //        isStart = true;
-        //        timer = 0f; // ゲーム開始時にタイマーをリセット
-        //        gameManager.GetComponent<ScoreManager>().ResetScore();
-
-        //        animator.speed = 1f; // アニメーションを再開
-        //        transform.position = new Vector3(0, 0, 0); // 例：初期位置を(0, 0, 0)に設定
-        //        moveDirection = Vector2.down;
-        //        moveSp = 5f;
-        //    }
-        //    return;
-        //}
-
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Application.Quit();
+        }
         if (isGameOver) {
 
             gameOverImage.SetActive(true);
@@ -100,17 +89,7 @@ public class PlayerController : MonoBehaviour {
             }
 
             if (Input.GetKeyDown(KeyCode.Space)) {
-                //isStart = true;
-                //timer = 0f; // ゲーム開始時にタイマーをリセット
-                //gameManager.GetComponent<ScoreManager>().ResetScore();
-
-                //animator.speed = 1f; // アニメーションを再開
-                //transform.position = new Vector3(0, 0, 0); // 例：初期位置を(0, 0, 0)に設定
-                //moveDirection = Vector2.down;
-                //moveSp = 5f;
-
                 SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
-
             }
             return;
         }
@@ -151,14 +130,10 @@ public class PlayerController : MonoBehaviour {
     [System.Obsolete]
     void GameOver() {
         // ゲームオーバー処理
-        Debug.Log("ゲームオーバー！");
         rb.velocity = Vector2.zero; // 動きを止める
-        isStart = false;
         isGameOver = true;
 
-        animator.speed = 0f; // アニメーションを停止
-                             // ここにゲームオーバー画面の表示やリスタート処理を追加してください
-                             // 例: SceneManager.LoadScene("GameOverScene");
+        animator.speed = 0f; // アニメーションを停止          
 
         if (Input.GetKeyDown(KeyCode.Space)) {
             SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
@@ -179,14 +154,16 @@ public class PlayerController : MonoBehaviour {
         if (other.gameObject.CompareTag("Item")) {
             //Destroy(other.gameObject); // アイテムを消す
             //Debug.Log("アイテムを消す!");
-
-            int px = Random.Range(-3, 3);
-            int py = Random.Range(-2, 2);
+            int px,py;
+            do {
+                px = Random.Range(-3,3);
+                py = Random.Range(-2,2);
+            } while (transform.position.x == px && transform.position.y == py);
 
             this.aud.PlayOneShot(this.appleSE);
 
             other.transform.position = new Vector3(px,py,0);
-            if (moveSp < 10f) {
+            if (moveSp < 8f) {
                 moveSp += 1f;
             }
             point = 1;

@@ -15,35 +15,40 @@ public class SceneChangeTitle : MonoBehaviour {
     [SerializeField] GameObject pushStartImage;
     [SerializeField] GameObject pressStartText;
     public Text messageText;
+    AudioSource aud;
+    public AudioClip appleSE;
 
 
     private void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
 
         StartCoroutine(ShowResultSequence());
+        this.aud = GetComponent<AudioSource>();
     }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space)) {
             SceneManager.LoadScene("Title"); // ここに切り替えたいシーン名を記入
         }
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+        Application.Quit();
+        }
     }
 
 
     IEnumerator ShowResultSequence() {
         yield return new WaitForSeconds(1.0f);
+
+        this.aud.PlayOneShot(this.appleSE);
         messageText.text = "あなたの集めたりんごは";
-        // countText.text = "";
-        //pressStartText.gameObject.SetActive(false);
+
         yield return new WaitForSeconds(1.0f);
 
+        this.aud.PlayOneShot(this.appleSE);
         text.text = PlayerController.pointSum.ToString() + "個";
         PlayerController.pointSum=0;
-        //countText.text = appleCount.ToString() + "個";
-        yield return new WaitForSeconds(1.0f);
 
-        //pressStartText.gameObject.SetActive(true);
-        //StartCoroutine(BlinkPushStart());
+        yield return new WaitForSeconds(1.0f);
 
         StartCoroutine(BlinkPushStart());
 
@@ -52,7 +57,7 @@ public class SceneChangeTitle : MonoBehaviour {
     // 点滅処理
     IEnumerator BlinkPushStart() {
         while (true) {
-            Debug.Log("Blink!"); // 追加
+         
             pushStartImage.SetActive(true);
             yield return new WaitForSeconds(0.5f);
             pushStartImage.SetActive(false);
