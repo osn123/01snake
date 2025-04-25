@@ -3,19 +3,24 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.UI;
 
 public class SceneChangeTitle : MonoBehaviour {
-     SpriteRenderer spriteRenderer;
+    SpriteRenderer spriteRenderer;
     public float blinkInterval = 0.5f;  // 点滅の間隔（秒）
     public bool isBlinking = true;      // 点滅の制御フラグ
     private Coroutine blinkCoroutine;
     [SerializeField] private TextMeshProUGUI text;
 
+    [SerializeField] GameObject pushStartImage;
+    [SerializeField] GameObject pressStartText;
+    public Text messageText;
+
+
     private void Start() {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        blinkCoroutine = StartCoroutine(BlinkSprite());
-        text.text = PlayerController.pointSum.ToString();
-        //text.text = ScoreManager.GetScore().ToString;
+
+        StartCoroutine(ShowResultSequence());
     }
 
     void Update() {
@@ -24,10 +29,34 @@ public class SceneChangeTitle : MonoBehaviour {
         }
     }
 
-    private IEnumerator BlinkSprite() {
-        while (isBlinking) {
-            spriteRenderer.enabled = !spriteRenderer.enabled;  // 表示・非表示を切り替え
-            yield return new WaitForSeconds(blinkInterval);
+
+    IEnumerator ShowResultSequence() {
+        yield return new WaitForSeconds(1.0f);
+        messageText.text = "あなたの集めたりんごは";
+        // countText.text = "";
+        //pressStartText.gameObject.SetActive(false);
+        yield return new WaitForSeconds(1.0f);
+
+        text.text = PlayerController.pointSum.ToString() + "個";
+        PlayerController.pointSum=0;
+        //countText.text = appleCount.ToString() + "個";
+        yield return new WaitForSeconds(1.0f);
+
+        //pressStartText.gameObject.SetActive(true);
+        //StartCoroutine(BlinkPushStart());
+
+        StartCoroutine(BlinkPushStart());
+
+    }
+
+    // 点滅処理
+    IEnumerator BlinkPushStart() {
+        while (true) {
+            Debug.Log("Blink!"); // 追加
+            pushStartImage.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            pushStartImage.SetActive(false);
+            yield return new WaitForSeconds(0.5f);
         }
     }
 

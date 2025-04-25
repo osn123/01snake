@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : MonoBehaviour {
 
     // 画面端の境界値（ワールド座標）
     private float xMin, xMax, yMin, yMax;
@@ -26,15 +26,19 @@ public class PlayerController : MonoBehaviour
     int point = 0;
     public static int pointSum = 0;
 
-    [SerializeField] SpriteRenderer over;
-    [SerializeField] SpriteRenderer press;
+    [SerializeField] GameObject gameOverImage;
+    [SerializeField] GameObject pushStartImage;
 
     public AudioClip appleSE;
     AudioSource aud;
 
+    private Coroutine blinkCoroutine;
 
-    void Awake()
-    {
+    public AudioClip bgmClip;
+    private AudioSource audioSource;
+
+
+    void Awake() {
         // カメラのビューポートからワールド座標を取得して境界を設定
         Camera cam = Camera.main;
         Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0, 0, 0));
@@ -50,8 +54,7 @@ public class PlayerController : MonoBehaviour
         yMax = topRight.y;
 
         animator = GetComponent<Animator>();
-        if (animator == null)
-        {
+        if (animator == null) {
             Debug.LogError("Animatorが見つかりません！");
         }
 
@@ -59,19 +62,21 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void Start()
-    {
+    void Start() {
         isStart = false; // ゲーム開始フラグを初期化
         isGameOver = false; // 
         //animator.speed = 0f; // アニメーションを停止
-        over = GetComponent<SpriteRenderer>();
-        press = GetComponent<SpriteRenderer>();
         this.aud = GetComponent<AudioSource>();
+        pushStartImage.SetActive(false);
+        gameOverImage.SetActive(false);
+
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = bgmClip;
+        audioSource.Play();
     }
 
     [System.Obsolete]
-    void Update()
-    {
+    void Update() {
         //if (!isStart) {
         //    if (Input.GetKeyDown(KeyCode.Space)) {
         //        isStart = true;
@@ -86,15 +91,15 @@ public class PlayerController : MonoBehaviour
         //    return;
         //}
 
-        if (isGameOver)
-        {
+        if (isGameOver) {
 
-            over.enabled = true;
-            //over.SetActive(true);
-            press.enabled = true;
+            gameOverImage.SetActive(true);
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
+            if (isGameOver && blinkCoroutine == null) {
+                blinkCoroutine = StartCoroutine(BlinkPushStart());
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space)) {
                 //isStart = true;
                 //timer = 0f; // ゲーム開始時にタイマーをリセット
                 //gameManager.GetComponent<ScoreManager>().ResetScore();
@@ -113,8 +118,7 @@ public class PlayerController : MonoBehaviour
         timer += Time.deltaTime; // 毎フレームタイマーを更新
 
         // 時間経過でゲームオーバー判定
-        if (timer >= gameOverTime)
-        {
+        if (timer >= gameOverTime) {
             GameOver();
             return; // タイマーによるゲームオーバーが発生したら、以降の Update 処理は行わない
         }
@@ -129,15 +133,14 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKeyDown(KeyCode.RightArrow))
             moveDirection = Vector2.right;
 
-        animator.SetFloat("MoveX", moveDirection.x);
-        animator.SetFloat("MoveY", moveDirection.y);
+        animator.SetFloat("MoveX",moveDirection.x);
+        animator.SetFloat("MoveY",moveDirection.y);
 
         rb.velocity = moveDirection * moveSp;
 
         // 画面端判定
         Vector2 pos = transform.position;
-        if (pos.x < xMin || pos.x > xMax || pos.y < yMin || pos.y > yMax)
-        {
+        if (pos.x < xMin || pos.x > xMax || pos.y < yMin || pos.y > yMax) {
             GameOver();
         }
 
@@ -146,8 +149,7 @@ public class PlayerController : MonoBehaviour
     }
 
     [System.Obsolete]
-    void GameOver()
-    {
+    void GameOver() {
         // ゲームオーバー処理
         Debug.Log("ゲームオーバー！");
         rb.velocity = Vector2.zero; // 動きを止める
@@ -158,16 +160,23 @@ public class PlayerController : MonoBehaviour
                              // ここにゲームオーバー画面の表示やリスタート処理を追加してください
                              // 例: SceneManager.LoadScene("GameOverScene");
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        if (Input.GetKeyDown(KeyCode.Space)) {
             SceneManager.LoadScene("result"); // ここに切り替えたいシーン名を記入
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("Item"))
-        {
+    // 点滅処理
+    IEnumerator BlinkPushStart() {
+        while (true) {
+            pushStartImage.SetActive(true);
+            yield return new WaitForSeconds(0.5f);
+            pushStartImage.SetActive(false);
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.gameObject.CompareTag("Item")) {
             //Destroy(other.gameObject); // アイテムを消す
             //Debug.Log("アイテムを消す!");
 
@@ -176,9 +185,8 @@ public class PlayerController : MonoBehaviour
 
             this.aud.PlayOneShot(this.appleSE);
 
-            other.transform.position = new Vector3(px, py, 0);
-            if (moveSp < 10f)
-            {
+            other.transform.position = new Vector3(px,py,0);
+            if (moveSp < 10f) {
                 moveSp += 1f;
             }
             point = 1;

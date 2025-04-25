@@ -223,7 +223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &690126264
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1124,9 +1124,10 @@ MonoBehaviour:
   gameManager: {fileID: 1852158167}
   timerText: {fileID: 690126265}
   gameOverTime: 5
-  over: {fileID: 886056843}
-  press: {fileID: 37148479}
-  appleSE: {fileID: 8300000, guid: 964241b8b067d2c4bbf25387fe650910, type: 3}
+  gameOverImage: {fileID: 886056842}
+  pushStartImage: {fileID: 37148478}
+  appleSE: {fileID: 8300000, guid: 7e4adfa93146213449087c77e3c46962, type: 3}
+  bgmClip: {fileID: 8300000, guid: fb94ed38366bf094583250c03b7ad988, type: 3}
 --- !u!58 &2045227656
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1225,7 +1226,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.23
   m_Pitch: 1
   Loop: 0
   Mute: 0
