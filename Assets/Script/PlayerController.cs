@@ -124,6 +124,8 @@ public class PlayerController : MonoBehaviour {
             // 1. 座標を補正（画面内の範囲にクランプ）
             pos.x = Mathf.Clamp(pos.x,xMin,xMax);
             pos.y = Mathf.Clamp(pos.y,yMin,yMax);
+            transform.position = pos;
+
             GameOver();
         }
 
@@ -156,24 +158,25 @@ public class PlayerController : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Item")) {
-            //Destroy(other.gameObject); // アイテムを消す
+            Destroy(other.gameObject); // アイテムを消す
             //Debug.Log("アイテムを消す!");
-            int px,py;
-            do {
-                px = Random.Range(-3,3);
-                py = Random.Range(-2,2);
-            } while (transform.position.x == px && transform.position.y == py);
+
+            //int px,py;
+            //do {
+            //    px = Random.Range(-3,3);
+            //    py = Random.Range(-2,2);
+            //} while (transform.position.x == px && transform.position.y == py);
+            //other.transform.position = new Vector3(px,py,0);
 
             this.aud.PlayOneShot(this.appleSE);
 
-            other.transform.position = new Vector3(px,py,0);
             if (moveSp < 8f) {
                 moveSp += 1f;
             }
             point = 1;
             pointSum += 1;
 
-            gameManager.GetComponent<ScoreManager>().AddScore(point);
+            gameManager.GetComponent<GameManager>().AddScore(point);
 
 
         }
