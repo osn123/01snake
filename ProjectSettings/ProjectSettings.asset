@@ -13,7 +13,8 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: "2025 \u5E74\u5EA6_\u5236\u4F5C\u5B9F\u7FD2_\u30B9\u30CD\u30FC\u30AF\u30B2\u30FC\u30E0_\u5927\u4E45\u4FDD\u62D3"
+  productName: "2025 \u5E74\u5EA6 \u5236\u4F5C\u5B9F\u7FD2 \u30B9\u30CD\u30FC\u30AF\u30B2\u30FC\u30E0
+    \u5927\u4E45\u4FDD\u62D3"
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -141,8 +142,7 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 1.0
-  preloadedAssets:
-  - {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
