@@ -2,47 +2,71 @@
 using UnityEngine.UI;
 using TMPro;
 
-public class GameManager : MonoBehaviour {
-    public TextMeshProUGUI scoreText; // InspectorでTextコンポーネントをアタッチ
+public class GameManager : MonoBehaviour
+{
+    // スコア表示用のTextMeshProUGUI。Inspectorでアタッチする
+    public TextMeshProUGUI scoreText;
+    // 現在のスコア
     private int score = 0;
 
-    public GameObject applePrefab; // りんごのプレハブ
-    private GameObject currentApple; // 現在のりんご
-    void Start() {
-        UpdateScoreText();
+    // りんごのプレハブ。Inspectorでアタッチする
+    public GameObject applePrefab;
+    // 現在シーン上に存在するりんご
+    private GameObject currentApple;
+
+    // ゲーム開始時に呼ばれる
+    void Start()
+    {
+        UpdateScoreText(); // スコア表示を初期化
     }
 
-    void Update() {
-        // りんごが存在しない場合、新たに生成
-        if (currentApple == null) {
+    // 毎フレーム呼ばれる
+    void Update()
+    {
+        // りんごが存在しない場合、新しく生成する
+        if (currentApple == null)
+        {
             SpawnApple();
         }
     }
 
-    void SpawnApple() {
-        // ランダムな位置
+    // りんごをランダムな位置に生成するメソッド
+    void SpawnApple()
+    {
         Vector3 spawnPos;
-        do {
-        spawnPos = new Vector3(Random.Range(-3,3), Random.Range(-2,2),0);
-        } while (transform.position == spawnPos);     
+        do
+        {
+            // x: -3〜3, y: -2〜2 の範囲でランダムな位置を決定
+            spawnPos = new Vector3(Random.Range(-3, 4), Random.Range(-2, 3), 0);
+        } while (transform.position == spawnPos); // 万が一同じ位置を避ける
 
-        currentApple = Instantiate(applePrefab,spawnPos,Quaternion.identity);
+        // りんごプレハブを指定した位置に生成
+        currentApple = Instantiate(applePrefab, spawnPos, Quaternion.identity);
     }
 
-    public void AddScore(int points) {
+    // スコアを加算し、表示を更新するメソッド
+    public void AddScore(int points)
+    {
         score += points;
         UpdateScoreText();
     }
 
-    public void ResetScore() {
+    // スコアをリセットし、表示を更新するメソッド
+    public void ResetScore()
+    {
         score = 0;
         UpdateScoreText();
     }
 
-    void UpdateScoreText() {
+    // スコア表示を更新するメソッド
+    void UpdateScoreText()
+    {
         scoreText.text = "Score: " + score;
     }
-    int GetScore() {
+
+    // 現在のスコアを取得するメソッド（外部から呼び出し用）
+    int GetScore()
+    {
         return score;
     }
 }

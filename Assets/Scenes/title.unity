@@ -432,7 +432,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1091477699}
   - component: {fileID: 1091477698}
-  - component: {fileID: 1091477700}
+  - component: {fileID: 1091477701}
   m_Layer: 0
   m_Name: press space
   m_TagString: Untagged
@@ -510,7 +510,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1091477700
+--- !u!114 &1091477701
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -519,7 +519,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1091477697}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 512c817aaee6f574c8827b502952505e, type: 3}
+  m_Script: {fileID: 11500000, guid: 69c9733fe36499f4ea8cd0c4c46a746b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   blinkInterval: 0.5

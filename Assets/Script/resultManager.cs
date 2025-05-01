@@ -1,71 +1,78 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
 using UnityEngine.UI;
 
-
+// リザルト画面の管理クラス
 public class resultManager : MonoBehaviour
 {
-    SpriteRenderer spriteRenderer;
+    SpriteRenderer spriteRenderer; // スプライトのレンダラー
     public float blinkInterval = 0.5f;  // 点滅の間隔（秒）
     public bool isBlinking = true;      // 点滅の制御フラグ
-    private Coroutine blinkCoroutine;
+    private Coroutine blinkCoroutine;   // コルーチン制御用
 
-    [SerializeField] GameObject pushStartImage;
-    public Text messageText;
-    public Text pointText;
-    AudioSource aud;
-    public AudioClip appleSE;
+    [SerializeField] GameObject pushStartImage; // 「Push Start」画像
+    public Text messageText;    // メッセージテキスト
+    public Text pointText;      // ポイント表示テキスト
+    AudioSource aud;            // オーディオソース
+    public AudioClip appleSE;   // 効果音（りんご取得音）
 
+    // 初期化処理
+    private void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>(); // スプライトレンダラー取得
 
-    private void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-        StartCoroutine(ShowResultSequence());
-        this.aud = GetComponent<AudioSource>();
-        messageText.gameObject.SetActive(false);
-        pointText.gameObject.SetActive(false);
+        StartCoroutine(ShowResultSequence()); // リザルト表示シーケンス開始
+        this.aud = GetComponent<AudioSource>(); // オーディオソース取得
+        messageText.gameObject.SetActive(false); // メッセージ非表示
+        pointText.gameObject.SetActive(false);   // ポイント非表示
     }
 
-    void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            SceneManager.LoadScene("Title"); 
+    // 毎フレーム呼ばれる
+    void Update()
+    {
+        // スペースキーでタイトル画面に戻る
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            SceneManager.LoadScene("Title");
         }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        // エスケープキーでアプリ終了
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
             Application.Quit();
         }
     }
 
+    // リザルト表示の流れを管理するコルーチン
+    IEnumerator ShowResultSequence()
+    {
+        yield return new WaitForSeconds(1.0f); // 1秒待機
 
-    IEnumerator ShowResultSequence() {
-        yield return new WaitForSeconds(1.0f);
+        messageText.text = "あなたの集めたりんごは"; // メッセージ表示
+        messageText.gameObject.SetActive(true); // メッセージ表示ON
+        this.aud.PlayOneShot(this.appleSE);     // 効果音再生
 
-        messageText.text = "あなたの集めたりんごは";
-        messageText.gameObject.SetActive(true);
-        this.aud.PlayOneShot(this.appleSE);
+        yield return new WaitForSeconds(1.0f); // 1秒待機
 
-        yield return new WaitForSeconds(1.0f);
+        pointText.text = PlayerController.pointSum.ToString() + "個"; // ポイント表示
+        pointText.gameObject.SetActive(true); // ポイント表示ON
+        this.aud.PlayOneShot(this.appleSE);   // 効果音再生
+        PlayerController.pointSum = 0;        // ポイントリセット
 
-        pointText.text = PlayerController.pointSum.ToString() + "個";
-        pointText.gameObject.SetActive(true);
-        this.aud.PlayOneShot(this.appleSE);
-        PlayerController.pointSum = 0;
+        yield return new WaitForSeconds(1.0f); // 1秒待機
 
-        yield return new WaitForSeconds(1.0f);
-
-        StartCoroutine(BlinkPushStart());
-
+        StartCoroutine(BlinkPushStart());      // 「Push Start」点滅開始
     }
 
-    // 点滅処理
-    IEnumerator BlinkPushStart() {
-        while (true) {
-
-            pushStartImage.SetActive(true);
-            yield return new WaitForSeconds(0.5f);
-            pushStartImage.SetActive(false);
-            yield return new WaitForSeconds(0.5f);
+    // 「Push Start」画像を点滅させるコルーチン
+    IEnumerator BlinkPushStart()
+    {
+        while (true)
+        {
+            pushStartImage.SetActive(true);   // 画像表示
+            yield return new WaitForSeconds(0.5f); // 0.5秒待機
+            pushStartImage.SetActive(false);  // 画像非表示
+            yield return new WaitForSeconds(0.5f); // 0.5秒待機
         }
     }
 }
